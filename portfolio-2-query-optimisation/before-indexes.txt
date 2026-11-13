@@ -116,7 +116,6 @@ ORDER BY times_prescribed DESC
 LIMIT 5;
 
 
-
 1	SIMPLE	m	index	PRIMARY	uq_med_name_form	644	NULL	14	14.00	100.00	100.00	Using index; Using temporary; Using filesort	
 1	SIMPLE	pi	ref	fk_item_med	fk_item_med	4	nphcda_clinic.m.medication_id	1	2.00	100.00	100.00		
 
