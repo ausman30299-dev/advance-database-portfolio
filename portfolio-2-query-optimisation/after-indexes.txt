@@ -30,4 +30,28 @@ ORDER BY a.scheduled_at DESC;
 1	SIMPLE	s	eq_ref	PRIMARY	PRIMARY	4	nphcda_clinic.d.staff_id	1	1.00	100.00	100.00		
 1	SIMPLE	c	eq_ref	appointment_id	appointment_id	4	nphcda_clinic.a.appointment_id	1	1.00	100.00	100.00		
 1	SIMPLE	p	ref	idx_payment_appointment	idx_payment_appointment	5	nphcda_clinic.a.appointment_id	1	1.00	100.00	100.00		
+## Query 2
+127.0.0.1/nphcda_clinic/		http://localhost/phpmyadmin/index.php?route=/database/sql&db=nphcda_clinic
+
+   Your SQL query has been executed successfully. (Query took 0.0009 seconds.)
+
+
+ANALYZE
+SELECT
+  b.name AS branch_name,
+  CONCAT(s.first_name, ' ', s.last_name) AS doctor_name,
+  COUNT(a.appointment_id) AS total_appointments
+FROM doctor d
+JOIN staff s        ON s.staff_id  = d.staff_id
+JOIN branch b       ON b.branch_id = s.branch_id
+LEFT JOIN appointment a ON a.doctor_id = d.doctor_id
+GROUP BY b.name, s.first_name, s.last_name
+ORDER BY b.name, total_appointments DESC;
+
+
+
+1	SIMPLE	d	index	staff_id	staff_id	4	NULL	5	5.00	100.00	100.00	Using index; Using temporary; Using filesort	
+1	SIMPLE	s	eq_ref	PRIMARY,fk_staff_branch	PRIMARY	4	nphcda_clinic.d.staff_id	1	1.00	100.00	100.00		
+1	SIMPLE	a	ref	idx_appt_doctor_time	idx_appt_doctor_time	4	nphcda_clinic.d.doctor_id	3	6.00	100.00	100.00	Using index	
+1	SIMPLE	b	eq_ref	PRIMARY	PRIMARY	4	nphcda_clinic.s.branch_id	1	1.00	100.00	100.00		
 
