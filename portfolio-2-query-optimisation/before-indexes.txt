@@ -30,4 +30,28 @@ ORDER BY a.scheduled_at DESC;
 1	SIMPLE	s	eq_ref	PRIMARY	PRIMARY	4	nphcda_clinic.d.staff_id	1	1.00	100.00	100.00		
 1	SIMPLE	c	eq_ref	appointment_id	appointment_id	4	nphcda_clinic.a.appointment_id	1	1.00	100.00	100.00		
 1	SIMPLE	p	ref	fk_pay_appt	fk_pay_appt	5	nphcda_clinic.a.appointment_id	1	1.00	100.00	100.00		
+## Query 2 — Appointment count per doctor per branch
+127.0.0.1/nphcda_clinic/		http://localhost/phpmyadmin/index.php?route=/database/sql&db=nphcda_clinic
+
+   Your SQL query has been executed successfully. (Query took 0.0016 seconds.)
+
+
+ANALYZE
+SELECT
+  b.name AS branch_name,
+  p.method,
+  COUNT(p.payment_id) AS payment_count,
+  SUM(p.amount) AS total_revenue
+FROM payment p
+JOIN patient pt  ON pt.patient_id = p.patient_id
+JOIN branch b    ON b.branch_id  = pt.registered_branch_id
+WHERE p.status = 'paid'
+GROUP BY b.name, p.method
+ORDER BY b.name, total_revenue DESC;
+
+
+
+1	SIMPLE	p	ALL	fk_pay_patient	NULL	NULL	NULL	20	20.00	100.00	100.00	Using where; Using temporary; Using filesort	
+1	SIMPLE	pt	eq_ref	PRIMARY,fk_patient_branch	PRIMARY	4	nphcda_clinic.p.patient_id	1	1.00	100.00	100.00		
+1	SIMPLE	b	ALL	PRIMARY	NULL	NULL	NULL	4	4.00	100.00	25.00	Using where; Using join buffer (flat, BNL join)	
 
