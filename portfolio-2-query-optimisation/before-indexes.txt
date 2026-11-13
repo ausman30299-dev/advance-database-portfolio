@@ -79,4 +79,22 @@ ORDER BY b.name, total_revenue DESC;
 1	SIMPLE	p	ALL	fk_pay_patient	NULL	NULL	NULL	20	20.00	100.00	100.00	Using where; Using temporary; Using filesort	
 1	SIMPLE	pt	eq_ref	PRIMARY,fk_patient_branch	PRIMARY	4	nphcda_clinic.p.patient_id	1	1.00	100.00	100.00		
 1	SIMPLE	b	ALL	PRIMARY	NULL	NULL	NULL	4	4.00	100.00	25.00	Using where; Using join buffer (flat, BNL join)	
+## Query 4 — Monthly appointment trend
+127.0.0.1/nphcda_clinic/appointment/		http://localhost/phpmyadmin/index.php?route=/table/sql&db=nphcda_clinic&table=appointment
+
+   Your SQL query has been executed successfully. (Query took 0.0004 seconds.)
+
+
+ANALYZE
+SELECT
+  DATE_FORMAT(scheduled_at, '%Y-%m') AS month,
+  COUNT(*) AS appointment_count
+FROM appointment
+WHERE scheduled_at >= '2026-01-01' AND scheduled_at < '2027-01-01'
+GROUP BY DATE_FORMAT(scheduled_at, '%Y-%m')
+ORDER BY month;
+
+
+
+1	SIMPLE	appointment	index	NULL	idx_appt_doctor_time	9	NULL	30	30.00	100.00	100.00	Using where; Using index; Using temporary; Using filesort	
 
