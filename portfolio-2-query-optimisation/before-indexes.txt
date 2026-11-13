@@ -97,4 +97,26 @@ ORDER BY month;
 
 
 1	SIMPLE	appointment	index	NULL	idx_appt_doctor_time	9	NULL	30	30.00	100.00	100.00	Using where; Using index; Using temporary; Using filesort	
+## Query 5 — Top prescribed medications
+127.0.0.1/nphcda_clinic/medication/		http://localhost/phpmyadmin/index.php?route=/table/sql&db=nphcda_clinic&table=medication
+
+   Your SQL query has been executed successfully. (Query took 0.0005 seconds.)
+
+
+ANALYZE
+SELECT
+  m.name AS medication,
+  m.form,
+  COUNT(pi.item_id) AS times_prescribed,
+  SUM(pi.quantity) AS total_quantity
+FROM medication m
+JOIN prescription_item pi ON pi.medication_id = m.medication_id
+GROUP BY m.medication_id, m.name, m.form
+ORDER BY times_prescribed DESC
+LIMIT 5;
+
+
+
+1	SIMPLE	m	index	PRIMARY	uq_med_name_form	644	NULL	14	14.00	100.00	100.00	Using index; Using temporary; Using filesort	
+1	SIMPLE	pi	ref	fk_item_med	fk_item_med	4	nphcda_clinic.m.medication_id	1	2.00	100.00	100.00		
 
