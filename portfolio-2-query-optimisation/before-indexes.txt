@@ -1,1 +1,33 @@
+## Query 1 — Patient visit history
+127.0.0.1/nphcda_clinic/		http://localhost/phpmyadmin/index.php?route=/database/sql&db=nphcda_clinic
+
+   Your SQL query has been executed successfully. (Query took 0.0037 seconds.)
+
+
+ANALYZE
+SELECT
+  a.appointment_id,
+  a.scheduled_at,
+  CONCAT(s.first_name, ' ', s.last_name) AS doctor_name,
+  b.name AS branch_name,
+  c.diagnosis,
+  p.amount AS amount_paid,
+  p.method AS payment_method
+FROM appointment a
+JOIN doctor d        ON d.doctor_id = a.doctor_id
+JOIN staff  s        ON s.staff_id  = d.staff_id
+JOIN branch b        ON b.branch_id = a.branch_id
+LEFT JOIN consultation c ON c.appointment_id = a.appointment_id
+LEFT JOIN payment p      ON p.appointment_id = a.appointment_id
+WHERE a.patient_id = 1
+ORDER BY a.scheduled_at DESC;
+
+
+
+1	SIMPLE	a	ref	fk_appt_patient,fk_appt_branch,idx_appt_doctor_time	fk_appt_patient	4	const	1	1.00	100.00	100.00	Using where; Using filesort	
+1	SIMPLE	d	eq_ref	PRIMARY,staff_id	PRIMARY	4	nphcda_clinic.a.doctor_id	1	1.00	100.00	100.00		
+1	SIMPLE	b	eq_ref	PRIMARY	PRIMARY	4	nphcda_clinic.a.branch_id	1	1.00	100.00	100.00		
+1	SIMPLE	s	eq_ref	PRIMARY	PRIMARY	4	nphcda_clinic.d.staff_id	1	1.00	100.00	100.00		
+1	SIMPLE	c	eq_ref	appointment_id	appointment_id	4	nphcda_clinic.a.appointment_id	1	1.00	100.00	100.00		
+1	SIMPLE	p	ref	fk_pay_appt	fk_pay_appt	5	nphcda_clinic.a.appointment_id	1	1.00	100.00	100.00		
 
