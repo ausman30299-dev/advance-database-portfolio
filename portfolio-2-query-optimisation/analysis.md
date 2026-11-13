@@ -1,5 +1,6 @@
 # Query Optimisation Analysis
 
+
 ## Overview
 This document analyses the performance of 5 queries run against the `nphcda_clinic` database. It compares execution plans taken **before** adding indexes (`before-indexes.txt`) with plans taken **after** adding targeted indexes (`after-indexes.txt`). 
 
