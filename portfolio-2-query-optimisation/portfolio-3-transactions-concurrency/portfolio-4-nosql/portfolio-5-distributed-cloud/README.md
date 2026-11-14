@@ -141,3 +141,22 @@ Normal form	Status	Key evidence
 2NF	✅ Achieved	Surrogate keys on all tables; no partial dependencies on composite keys
 3NF	✅ Achieved	Doctor specialisation extracted to doctor table; branch, medication, and payment details referenced by foreign key rather than duplicated
 Denormalisation	⚠️ Justified	prescription_item.unit_price (historical pricing) and separated lab_result table (workflow modelling) — both documented above
+
+#### 3. `README.md`
+Copy and paste this to explain your work:
+```markdown
+# Portfolio 5: Database Replication
+
+## Overview
+This portfolio demonstrates the configuration and setup of MySQL Master-Replica (Master-Slave) replication. 
+
+Because this project is hosted on a single local machine (XAMPP), launching a physical second server on Port 3307 caused Windows service conflicts. Therefore, this portfolio provides the complete, correct configuration scripts and theoretical proof of how replication is achieved.
+
+## Why Replication Matters
+Replication ensures high availability. If the Master database (Port 3306) crashes or loses power, the Replica database (Port 3307) holds an exact copy of the data and can instantly take over, ensuring the clinic never loses patient records.
+
+## Folder Contents
+* `master-configuration.md`: Details the `my.ini` settings and SQL commands required to prepare the Master server (binary logging, replication user creation).
+* `replica-configuration.md`: Details the `my.ini` settings and the `CHANGE MASTER TO` SQL script required to link the Replica to the Master.
+
+*(Note: If I were to run this on two separate machines, the Replica would read the Master's binary log and apply the exact same INSERT/UPDATE/DELETE commands in real-time).*
